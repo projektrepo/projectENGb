@@ -2,6 +2,8 @@ package com.example.projecteng.entity;
 
 public class Flashcard {
 
+    public static final String TABLE_NAME = "flashcards";
+
     private Long id;
     private String english;
     private String polish;
