@@ -68,7 +68,7 @@ public class DatabaseConnector {
         return results;
     }
 
-    public boolean insert(String table, Set<String> values) {
+    public boolean insert(String table, List<String> values) {
         String query = "INSERT INTO " + table + " VALUES (";
 
         for (String value : values) {

@@ -5,96 +5,72 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.example.projecteng.database.DatabaseConnector;
 import com.example.projecteng.entity.Flashcard;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class FlashcardCrud {
 
-    private DatabaseHelper databaseHelper;
+    private DatabaseConnector databaseConnector;
 
-    public FlashcardCrud(DatabaseHelper databaseHelper) {
-        this.databaseHelper = databaseHelper;
+    public FlashcardCrud() {
+        this.databaseConnector = DatabaseConnector.getInstance();
     }
 
     public List<Flashcard> findAll() {
-        SQLiteDatabase readable = this.databaseHelper.getReadableDatabase();
-
-        Cursor result = readable.rawQuery("SELECT * FROM " + Flashcard.TABLE_NAME, null, null);
-        result.moveToFirst();
-
         List<Flashcard> flashcards = new ArrayList<>();
-        while (!result.isAfterLast()) {
-            Long id = result.getLong(result.getColumnIndex("id"));
-            String english = result.getString(result.getColumnIndex("english"));
-            String polish = result.getString(result.getColumnIndex("polish"));
+        List<Map<String, String>> flashcardRows = this.databaseConnector.select(Flashcard.TABLE_NAME, null);
 
-            flashcards.add(new Flashcard(id, english, polish));
+        try {
+            for (Map<String, String> row : flashcardRows) {
+                Long id = Long.parseLong(row.get("id"));
+                String english = row.get("englsh");
+                String polish = row.get("polish");
+
+                flashcards.add(new Flashcard(id, english, polish));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
 
-        result.close();
         return flashcards;
     }
 
     public Flashcard find(Long id) {
-        SQLiteDatabase readable = this.databaseHelper.getReadableDatabase();
+        List<Map<String, String>> rows = this.databaseConnector.select(Flashcard.TABLE_NAME, id.toString());
 
-        Cursor result = readable.rawQuery("SELECT * FROM " + Flashcard.TABLE_NAME + " WHERE id = ?", new String[] { id.toString()}, null );
-        result.moveToFirst();
+        String english = rows.get(0).get("english");
+        String polish = rows.get(0).get("polish");
 
-        if (result.getCount() < 1) {
-            return null;
-        }
-
-        String english = result.getString(result.getColumnIndex("english"));
-        String polish = result.getString(result.getColumnIndex("polish"));
-
-        result.close();
         return new Flashcard(id, english, polish);
     }
 
     public boolean create(Flashcard flashcard) {
-        SQLiteDatabase writable = this.databaseHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
+        List<String> values = new ArrayList<>();
 
-        values.put("english", flashcard.getEnglish());
-        values.put("polish", flashcard.getPolish());
+        values.add("null");
+        values.add("'" + flashcard.getEnglish() + "'");
+        values.add("'" + flashcard.getPolish() + "'");
 
-        try {
-            writable.insert(Flashcard.TABLE_NAME, null, values);
-        } catch (SQLException e) {
-            return false;
-        }
-
-        return true;
+        return this.databaseConnector.insert(Flashcard.TABLE_NAME, values);
     }
 
     public boolean update(Flashcard flashcard) {
-        SQLiteDatabase writable = this.databaseHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
+        Map<String, String> values = new HashMap<>();
 
         values.put("english", flashcard.getEnglish());
         values.put("polish", flashcard.getPolish());
 
-        try {
-            writable.update(Flashcard.TABLE_NAME, values, "id = ?", new String[] { flashcard.getId().toString() });
-        } catch (SQLException e) {
-            return false;
-        }
-
-        return true;
+        return this.databaseConnector.update(Flashcard.TABLE_NAME, values, flashcard.getId().toString());
     }
 
     public boolean delete(Long id) {
-        SQLiteDatabase writable = this.databaseHelper.getWritableDatabase();
-
-        try {
-            writable.delete(Flashcard.TABLE_NAME, "id = ?", new String[] { id.toString() });
-        } catch (SQLException e) {
-            return false;
-        }
-
-        return true;
+        return this.databaseConnector.delete(Flashcard.TABLE_NAME, id.toString());
     }
 }
