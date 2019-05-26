@@ -37,10 +37,10 @@
                     android:text="Button" />
 
                 <Button
-                    android:id="@+id/button5"
+                    android:id="@+id/flashcards"
                     android:layout_width="match_parent"
                     android:layout_height="106dp"
-                    android:text="Button" />
+                    android:text="Fiszki" />
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

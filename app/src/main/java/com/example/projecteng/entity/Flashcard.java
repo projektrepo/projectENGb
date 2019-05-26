@@ -37,4 +37,9 @@ public class Flashcard {
     public void setPolish(String polish) {
         this.polish = polish;
     }
+
+    @Override
+    public String toString() {
+        return this.english + ": " + this.polish;
+    }
 }

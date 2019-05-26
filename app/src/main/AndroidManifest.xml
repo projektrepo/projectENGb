@@ -14,6 +14,7 @@
         <activity android:name=".engczasy"></activity>
         <activity android:name=".learnlan" />
         <activity android:name=".slangdict" />
+        <activity android:name=".flashcards.FlashcardsActivity"/>
         <activity
             android:name=".exercises"
             android:configChanges="orientation|screenSize|keyboardHidden" />
