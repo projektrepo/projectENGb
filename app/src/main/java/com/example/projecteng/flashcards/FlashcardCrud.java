@@ -68,8 +68,8 @@ public class FlashcardCrud {
     public boolean update(Flashcard flashcard) {
         Map<String, String> values = new HashMap<>();
 
-        values.put("english", flashcard.getEnglish());
-        values.put("polish", flashcard.getPolish());
+        values.put("english", "'" + flashcard.getEnglish() + "'");
+        values.put("polish", "'" + flashcard.getPolish() + "'");
 
         return this.databaseConnector.update(Flashcard.TABLE_NAME, values, flashcard.getId().toString());
     }
