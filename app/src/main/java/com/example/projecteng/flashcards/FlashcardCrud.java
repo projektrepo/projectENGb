@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.projecteng.database.DatabaseHelper;
 import com.example.projecteng.entity.Flashcard;
 
 import java.util.ArrayList;

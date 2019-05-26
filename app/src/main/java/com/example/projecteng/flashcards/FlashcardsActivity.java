@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import com.example.projecteng.R;
-import com.example.projecteng.database.DatabaseHelper;
 import com.example.projecteng.entity.Flashcard;
 
 import java.util.List;
