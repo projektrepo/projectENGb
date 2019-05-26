@@ -11,13 +11,9 @@ import java.util.List;
 
 public class FlashcardsActivity extends AppCompatActivity {
 
-    private final DatabaseHelper databaseHelper;
     private FlashcardCrud crud;
 
     public FlashcardsActivity() {
-        this.databaseHelper = new DatabaseHelper(this);
-        this.crud = new FlashcardCrud(this.databaseHelper);
-
         List<Flashcard> flashcards = this.crud.findAll();
         System.out.println(flashcards);
     }

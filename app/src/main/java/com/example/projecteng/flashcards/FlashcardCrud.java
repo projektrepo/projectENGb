@@ -45,6 +45,10 @@ public class FlashcardCrud {
     public Flashcard find(Long id) {
         List<Map<String, String>> rows = this.databaseConnector.select(Flashcard.TABLE_NAME, id.toString());
 
+        if (rows.size() == 0) {
+            return null;
+        }
+
         String english = rows.get(0).get("english");
         String polish = rows.get(0).get("polish");
 

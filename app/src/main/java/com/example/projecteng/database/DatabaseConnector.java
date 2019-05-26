@@ -75,18 +75,21 @@ public class DatabaseConnector {
             query += value + ", ";
         }
 
-        query = query.substring(0, query.lastIndexOf(",") + 1);
+        query = query.substring(0, query.lastIndexOf(","));
         query += ")";
 
         try {
             Connection connection = DriverManager.getConnection(this.url, DATABASE_USER, DATABASE_PASS);
             Statement statement = connection.createStatement();
 
-            return statement.execute(query);
+            statement.execute(query);
+            connection.close();
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
+
+        return true;
     }
 
     public boolean update(String table, Map<String, String> values, String id) {
@@ -96,21 +99,24 @@ public class DatabaseConnector {
             query += key + " = " + values.get(key) + ", ";
         }
 
-        query = query.substring(0, query.lastIndexOf(",") + 1);
+        query = query.substring(0, query.lastIndexOf(","));
 
         if (id != null) {
-            query = " WHERE id = " + id;
+            query += " WHERE id = " + id;
         }
 
         try {
             Connection connection = DriverManager.getConnection(this.url, DATABASE_USER, DATABASE_PASS);
             Statement statement = connection.createStatement();
 
-            return statement.execute(query);
+            statement.execute(query);
+            connection.close();
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
+
+        return true;
     }
 
     public boolean delete(String table, String id) {
@@ -124,10 +130,13 @@ public class DatabaseConnector {
             Connection connection = DriverManager.getConnection(this.url, DATABASE_USER, DATABASE_PASS);
             Statement statement = connection.createStatement();
 
-            return statement.execute(query);
+            statement.execute(query);
+            connection.close();
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
+
+        return true;
     }
 }
