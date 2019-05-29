@@ -14,7 +14,9 @@ public class FlashcardsActivity extends AppCompatActivity {
     private FlashcardCrud crud;
 
     public FlashcardsActivity() {
-        List<Flashcard> flashcards = this.crud.findAll();
+        this.crud = new FlashcardCrud();
+
+        List<Flashcard> flashcards = this.crud.getAll();
         System.out.println(flashcards);
     }
 

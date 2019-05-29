@@ -1,5 +1,7 @@
 package com.example.projecteng.entity;
 
+import java.util.Objects;
+
 public class Flashcard {
 
     public static String TABLE_NAME = "flashcards";
@@ -12,6 +14,10 @@ public class Flashcard {
         this.id = id;
         this.english = english;
         this.polish = polish;
+    }
+
+    public Flashcard(String english, String polish) {
+        this(null, english, polish);
     }
 
     public Long getId() {
@@ -41,5 +47,18 @@ public class Flashcard {
     @Override
     public String toString() {
         return this.english + ": " + this.polish;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Flashcard flashcard = (Flashcard) o;
+        return id.equals(flashcard.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 }

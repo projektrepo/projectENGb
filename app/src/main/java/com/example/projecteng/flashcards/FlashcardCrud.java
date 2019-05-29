@@ -1,80 +1,89 @@
-package com.example.projecteng.flashcards;
+package com.example.projecteng.flashcards;;
 
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
-
-import com.example.projecteng.database.DatabaseConnector;
 import com.example.projecteng.entity.Flashcard;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class FlashcardCrud {
 
-    private DatabaseConnector databaseConnector;
+    private static long counter = 1;
+    private List<Flashcard> flashcards;
 
     public FlashcardCrud() {
-        this.databaseConnector = DatabaseConnector.getInstance();
+        this.flashcards = new ArrayList<>();
+
+        this.flashcards.add(new Flashcard(counter++, "sword", "miecz"));
+        this.flashcards.add(new Flashcard(counter++, "word", "słowo"));
+        this.flashcards.add(new Flashcard(counter++, "string", "struna"));
+        this.flashcards.add(new Flashcard(counter++, "spoon", "łyżka"));
+        this.flashcards.add(new Flashcard(counter++, "fork", "widelec"));
+        this.flashcards.add(new Flashcard(counter++, "knife", "nóż"));
+        this.flashcards.add(new Flashcard(counter++, "world", "świat"));
+        this.flashcards.add(new Flashcard(counter++, "weapon", "broń"));
+        this.flashcards.add(new Flashcard(counter++, "death", "śmierć"));
+        this.flashcards.add(new Flashcard(counter++, "elevator", "winda"));
+        this.flashcards.add(new Flashcard(counter++, "candy", "cukierek"));
     }
 
-    public List<Flashcard> findAll() {
-        List<Flashcard> flashcards = new ArrayList<>();
-        List<Map<String, String>> flashcardRows = this.databaseConnector.select(Flashcard.TABLE_NAME, null);
+    public List<Flashcard> getAll() {
+        return this.flashcards;
+    }
 
-        try {
-            for (Map<String, String> row : flashcardRows) {
-                Long id = Long.parseLong(row.get("id"));
-                String english = row.get("englsh");
-                String polish = row.get("polish");
-
-                flashcards.add(new Flashcard(id, english, polish));
+    public Flashcard getOne(Long id) {
+        Flashcard flashcard = null;
+        for (Flashcard f : this.flashcards) {
+            if (f.getId().equals(id)) {
+                flashcard = f;
+                break;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
         }
 
-        return flashcards;
-    }
-
-    public Flashcard find(Long id) {
-        List<Map<String, String>> rows = this.databaseConnector.select(Flashcard.TABLE_NAME, id.toString());
-
-        if (rows.size() == 0) {
-            return null;
-        }
-
-        String english = rows.get(0).get("english");
-        String polish = rows.get(0).get("polish");
-
-        return new Flashcard(id, english, polish);
+        return flashcard;
     }
 
     public boolean create(Flashcard flashcard) {
-        List<String> values = new ArrayList<>();
+        if (flashcard.getEnglish() == null || flashcard.getPolish() == null) {
+            return false;
+        }
 
-        values.add("null");
-        values.add("'" + flashcard.getEnglish() + "'");
-        values.add("'" + flashcard.getPolish() + "'");
-
-        return this.databaseConnector.insert(Flashcard.TABLE_NAME, values);
+        flashcard.setId(counter++);
+        this.flashcards.add(flashcard);
+        return true;
     }
 
-    public boolean update(Flashcard flashcard) {
-        Map<String, String> values = new HashMap<>();
+    public boolean update(Long id, Flashcard flashcardUpdated) {
+        if (flashcardUpdated.getEnglish() == null || flashcardUpdated.getPolish() == null) {
+            return false;
+        }
 
-        values.put("english", "'" + flashcard.getEnglish() + "'");
-        values.put("polish", "'" + flashcard.getPolish() + "'");
+        Flashcard flashcard = null;
+        for (Flashcard f : this.flashcards) {
+            if (f.getId().equals(id)) {
+                flashcard = f;
+                break;
+            }
+        }
 
-        return this.databaseConnector.update(Flashcard.TABLE_NAME, values, flashcard.getId().toString());
+        if (flashcard == null) {
+            return false;
+        }
+
+        flashcard.setEnglish(flashcardUpdated.getEnglish());
+        flashcard.setPolish(flashcardUpdated.getPolish());
+
+        return true;
     }
 
     public boolean delete(Long id) {
-        return this.databaseConnector.delete(Flashcard.TABLE_NAME, id.toString());
+        Flashcard flashcard = null;
+        for (Flashcard f : this.flashcards) {
+            if (f.getId().equals(id)) {
+                flashcard = f;
+                break;
+            }
+        }
+
+        return this.flashcards.remove(flashcard);
     }
 }
