@@ -11,7 +11,9 @@ import android.widget.ScrollView;
 import com.example.projecteng.R;
 import com.example.projecteng.entity.Flashcard;
 
+import java.io.File;
 import java.util.List;
+import java.util.Scanner;
 
 public class FlashcardsActivity extends AppCompatActivity {
 
@@ -21,7 +23,7 @@ public class FlashcardsActivity extends AppCompatActivity {
     private Button addFlashcardButton;
 
     public FlashcardsActivity() {
-        this.crud = new FlashcardCrud();
+        this.crud = FlashcardCrud.getInstance();
     }
 
     @Override
@@ -30,17 +32,20 @@ public class FlashcardsActivity extends AppCompatActivity {
         setContentView(R.layout.flashcards_activity);
 
         this.scrollView = (ScrollView) findViewById(R.id.flashcards_scrollview);
+        this.addFlashcardButton = (Button) findViewById(R.id.add_flashcard_button);
+
         render();
     }
 
     public void render() {
         List<Flashcard> flashcards = this.crud.getAll();
+        LinearLayout layout = (LinearLayout) this.scrollView.getChildAt(0);
+
         for (final Flashcard flashcard : flashcards) {
             final Button button = new Button(this);
 
             button.setId(Integer.valueOf(flashcard.getId().toString()));
             button.setText(flashcard.getEnglish());
-            LinearLayout layout = (LinearLayout) this.scrollView.getChildAt(0);
 
             button.setOnClickListener(new View.OnClickListener() {
                 private String english = flashcard.getEnglish();
