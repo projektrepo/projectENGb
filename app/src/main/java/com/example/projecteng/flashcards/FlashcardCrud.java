@@ -8,9 +8,11 @@ import java.util.List;
 public class FlashcardCrud {
 
     private static long counter = 1;
+    private static final FlashcardCrud instance = new FlashcardCrud();
+
     private List<Flashcard> flashcards;
 
-    public FlashcardCrud() {
+    private FlashcardCrud() {
         this.flashcards = new ArrayList<>();
 
         this.flashcards.add(new Flashcard(counter++, "sword", "miecz"));
@@ -24,6 +26,10 @@ public class FlashcardCrud {
         this.flashcards.add(new Flashcard(counter++, "death", "śmierć"));
         this.flashcards.add(new Flashcard(counter++, "elevator", "winda"));
         this.flashcards.add(new Flashcard(counter++, "candy", "cukierek"));
+    }
+
+    public static FlashcardCrud getInstance() {
+        return instance;
     }
 
     public List<Flashcard> getAll() {
