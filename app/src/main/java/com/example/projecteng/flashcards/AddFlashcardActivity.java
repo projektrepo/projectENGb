@@ -1,5 +1,6 @@
 package com.example.projecteng.flashcards;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -37,7 +38,11 @@ public class AddFlashcardActivity extends AppCompatActivity {
                     TextView errorText = (TextView) v.findViewById(R.id.error);
                     errorText.setVisibility(View.VISIBLE);
                 } else {
+                    FlashcardCrud flashcardCrud = FlashcardCrud.getInstance();
+                    flashcardCrud.create(new Flashcard(englishWord, polishWord));
 
+                    Intent flashcards = new Intent(AddFlashcardActivity.this, FlashcardsActivity.class);
+                    startActivity(flashcards);
                 }
             }
         });
