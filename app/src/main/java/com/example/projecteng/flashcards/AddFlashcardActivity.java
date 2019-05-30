@@ -35,7 +35,7 @@ public class AddFlashcardActivity extends AppCompatActivity {
                 String polishWord = polish.getText().toString();
 
                 if (englishWord.isEmpty() || polishWord.isEmpty()) {
-                    TextView errorText = (TextView) v.findViewById(R.id.error);
+                    TextView errorText = (TextView) findViewById(R.id.error);
                     errorText.setVisibility(View.VISIBLE);
                 } else {
                     FlashcardCrud flashcardCrud = FlashcardCrud.getInstance();
